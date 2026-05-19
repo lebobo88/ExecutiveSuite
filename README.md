@@ -4,9 +4,108 @@ A comprehensive multi-agent C-suite for Claude Code: 20 single-domain executive 
 
 Grounded in the research document `Corporate Multi-Agent AI Systems for C-Suite Strategic Decision Support, Information Triage, and Financial Architecture Integration.md`. Implements its **Financial Framework Hardcoding Directive**, its **synthetic boardroom / M&A triangulation / black-swan war-room masterclasses**, and its **EU AI Act / NIST AI RMF governance posture**.
 
+## Installation
+
+ExecutiveSuite can be installed at **project scope** (only available inside this directory — the default) or **user scope** (available in every project on the machine).
+
+### Project scope (default)
+
+Already done — the `.claude/` directory in this repo is auto-discovered by Claude Code when you run a session here.
+
+### User scope (Windows, symlink — recommended for live updates)
+
+Symlink the agents/skills/commands into `~/.claude/` so edits in this repo propagate to every project instantly. Requires either an **elevated PowerShell** or Windows **Developer Mode** enabled (`Settings → System → For developers → Developer Mode`).
+
+```powershell
+$src = "C:\AiAppDeployments\ExecutiveSuite\.claude"
+$dst = "$env:USERPROFILE\.claude"
+
+foreach ($d in 'agents','skills','commands') {
+  Get-ChildItem "$src\$d" | ForEach-Object {
+    $linkPath = Join-Path "$dst\$d" $_.Name
+    if (Test-Path $linkPath) { Remove-Item $linkPath -Recurse -Force }
+    New-Item -ItemType SymbolicLink -Path $linkPath -Target $_.FullName | Out-Null
+  }
+}
+```
+
+Verify:
+
+```powershell
+$dst = "$env:USERPROFILE\.claude"
+foreach ($d in 'agents','skills','commands') {
+  $n = (Get-ChildItem "$dst\$d" |
+        Where-Object { $_.LinkType -eq 'SymbolicLink' -and $_.Target -like '*ExecutiveSuite*' }).Count
+  "$d : $n symlinks"
+}
+# Expected: agents : 24, skills : 9, commands : 9
+```
+
+**What's intentionally NOT linked:**
+- `settings.json` — project-scoped (output root + statusline); do not promote to user scope.
+- `CLAUDE.md` — project contract; promoting it would inject ExecutiveSuite framing into every unrelated project.
+
+**Output location after user-scope install:** the agents write to `output/<domain>/…` relative to **the project Claude Code was launched from**, so each project accumulates its own `output/` tree. No `output/` is written into `~/.claude/`.
+
+**Caveats:**
+- Moving or deleting this repo breaks every symlink.
+- Renaming an asset in the repo leaves a dangling link in `~/.claude/` until the script is re-run.
+
+### User scope — copy instead (no Developer Mode / Admin needed)
+
+If you can't enable Developer Mode and don't want to run as Admin, copy instead of symlinking. Edits in the repo will then require re-running this to propagate.
+
+```powershell
+$src = "C:\AiAppDeployments\ExecutiveSuite\.claude"
+$dst = "$env:USERPROFILE\.claude"
+
+Copy-Item "$src\agents\*"   "$dst\agents\"   -Recurse -Force
+Copy-Item "$src\skills\*"   "$dst\skills\"   -Recurse -Force
+Copy-Item "$src\commands\*" "$dst\commands\" -Recurse -Force
+```
+
+### Rollback (user scope)
+
+Removes only the ExecutiveSuite assets from `~/.claude/` (links or copies); leaves the source repo untouched.
+
+```powershell
+$dst = "$env:USERPROFILE\.claude"
+
+# Symlinks: safe filter by target
+foreach ($d in 'agents','skills','commands') {
+  Get-ChildItem "$dst\$d" |
+    Where-Object { $_.LinkType -eq 'SymbolicLink' -and $_.Target -like '*ExecutiveSuite*' } |
+    ForEach-Object { Remove-Item $_.FullName -Force }
+}
+
+# Copies: remove by name
+$execAgents = 'ceo','cso','coo','cfo','cro','chief-risk-officer','cto','cio','cdo','caio','ciso','cpo','cmo','cxo','chief-communications-officer','chro','clo','chief-compliance-officer','csco','chief-sustainability-officer','boardroom','mna-cockpit','crisis-warroom','capital-allocation'
+$execAgents | ForEach-Object { Remove-Item "$dst\agents\$_.md" -ErrorAction SilentlyContinue }
+
+$execSkills = 'executive-protocol','financial-frameworks','ai-governance','debate-protocol','scenario-planning','enterprise-risk','mna-playbook','crisis-response','stakeholder-comms'
+$execSkills | ForEach-Object { Remove-Item "$dst\skills\$_" -Recurse -Force -ErrorAction SilentlyContinue }
+
+$execCmds = 'exec-brief','board-meeting','mna-review','crisis-mode','capital-decision','quarterly-review','decision-memo','risk-stress','executive-team'
+$execCmds | ForEach-Object { Remove-Item "$dst\commands\$_.md" -ErrorAction SilentlyContinue }
+```
+
+### macOS / Linux
+
+`~/.claude/` works the same on POSIX systems. Use `ln -s` instead of `New-Item -ItemType SymbolicLink`:
+
+```bash
+src="$HOME/AiAppDeployments/ExecutiveSuite/.claude"   # adjust path
+dst="$HOME/.claude"
+for d in agents skills commands; do
+  for f in "$src/$d"/*; do
+    ln -snf "$f" "$dst/$d/$(basename "$f")"
+  done
+done
+```
+
 ## Quick Start
 
-From any Claude Code session in this directory:
+Once installed (either scope), from any Claude Code session:
 
 ```
 /executive-team                                # See the roster
