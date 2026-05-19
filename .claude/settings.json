@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Glob",
+      "Grep",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(ls:*)",
+      "Bash(mkdir:*)"
+    ]
+  },
+  "env": {
+    "EXECUTIVE_SUITE_OUTPUT_ROOT": "output"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "echo 'ExecutiveSuite | C-suite multi-agent system'"
+  }
+}
