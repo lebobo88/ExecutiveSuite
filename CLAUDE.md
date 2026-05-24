@@ -4,7 +4,7 @@ A comprehensive multi-agent C-suite for enterprise strategic decision support, i
 
 ## Provenance
 
-Architecture grounded in: `Corporate Multi-Agent AI Systems for C-Suite Strategic Decision Support, Information Triage, and Financial Architecture Integration.md` (this directory). Agent file format mirrors `C:\AiAppDeployments\RLM-CLI-Starter\.claude\agents\*`. Orchestration patterns informed by `C:\AiAppDeployments\pair-programmer`.
+Architecture grounded in: `Corporate Multi-Agent AI Systems for C-Suite Strategic Decision Support, Information Triage, and Financial Architecture Integration.md` (this directory). Agent file format mirrors [RLM-Creative](https://github.com/lebobo88/RLM-Creative) agents. Orchestration patterns informed by [pair-programmer](https://github.com/lebobo88/pair-programmer).
 
 ## Roster
 
@@ -101,6 +101,6 @@ output/
 ## Conventions
 
 - Every agent declares: model, maxTurns, skills (frontmatter)
-- Default models: `opus` for CEO/CSO/CFO/boardroom/crisis-warroom/mna-cockpit/CTO/CAIO; `sonnet` for the rest
+- Default models: `opus` for CEO/CSO/CFO/CTO/CAIO/CPO/CLO/chief-risk-officer/boardroom/mna-cockpit/crisis-warroom/capital-allocation; `sonnet` for the rest
 - Every agent has explicit `Constraints` (what they don't decide) and a defined output directory
 - Every agent cites a decision framework with weighted criteria
