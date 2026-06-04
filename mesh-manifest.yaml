@@ -1,0 +1,82 @@
+apiVersion: agentmesh/v1
+kind: SiblingManifest
+
+metadata:
+  id: executive-suite
+  displayName: "ExecutiveSuite AI C-Suite"
+  version: "1.0.0"
+  description: "24-agent multi-role C-suite for strategic decision support. Thin MCP shim via Hydra executive_suite server."
+  # backendsKey: gateway flat-dict key.
+  # Source: ~/.hydra/backends.json — "executive_suite" entry (underscore, not hyphen).
+  backendsKey: "executive_suite"
+
+runtime:
+  type: python-langgraph
+  # Source: ~/.hydra/backends.json — "command": "python", "args": ["-m","mcp_servers.executive_suite"]
+  # The entrypoint is the __main__.py entry point of the executive_suite module.
+  entrypoint: "mcp_servers/executive_suite/__main__.py"
+  cwd: "C:/AiAppDeployments/Hydra"
+  # Source: ~/.hydra/backends.json "executive_suite" env block.
+  # Values are config, not credentials (AM-EDGE-007).
+  env:
+    PYTHONPATH: "C:/AiAppDeployments/Hydra"
+    HYDRA_ES_ROOT: "C:/AiAppDeployments/ExecutiveSuite"
+  healthProbe:
+    type: mcp-tool-call
+    # "es.ping" is the dedicated health probe.
+    # Source: Hydra/mcp_servers/executive_suite/server.py line 80 — "es.ping": ping
+    tool: "es.ping"
+    intervalMs: 20000
+    timeoutMs: 8000
+    failureThreshold: 3
+
+mcp:
+  endpoint:
+    type: stdio
+  # REAL tool names from Hydra/mcp_servers/executive_suite/server.py — _tool_handlers() return dict.
+  # Source: server.py lines 71-81.
+  tools:
+    - "es.roster.list"
+    - "es.agent.get"
+    - "es.skill.list"
+    - "es.skill.get"
+    - "es.command.list"
+    - "es.command.get"
+    - "es.output.write"
+    - "es.output.read"
+    - "es.ping"
+
+lifecycle:
+  startupDependencies:
+    - "hydra"
+  startTimeoutMs: 30000
+  gracefulShutdownMs: 10000
+  crashLoopBreaker:
+    threshold: 5
+    windowMs: 60000
+
+audit:
+  # "es.output.read" is the best read tool for retrieving audit/decision artifacts.
+  # Source: server.py line 79 — "es.output.read": output_read
+  # Formal audit federation routes through TheEights per governance precedence.
+  # See manifests/GOVERNANCE-ROUTING.md §executive-suite for details.
+  exportTool: "es.output.read"
+  dedupeKeyField: "relative"
+
+governance:
+  # Constitution path relative to runtime.cwd (C:/AiAppDeployments/Hydra).
+  # ExecutiveSuite has no root-level CONSTITUTION.md.
+  # Destination after merge pass: C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md
+  # (authored at manifests/constitutions/executive-suite.CONSTITUTION.md — see README).
+  # NOTE: constitutionPath is relative to the Hydra cwd (the server's working directory).
+  # The actual file lives at C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md — this
+  # relative path traversal from Hydra cwd is safe (no YAML injection chars in the path).
+  # When meshd resolves: resolve(join("C:/AiAppDeployments/Hydra", "../ExecutiveSuite/CONSTITUTION.md"))
+  # = C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md (correct).
+  constitutionPath: "../ExecutiveSuite/CONSTITUTION.md"
+  # executive_suite server has no dedicated attest tool.
+  # "es.ping" confirms MCP connectivity only (proves server alive, not constitution hash).
+  # Formal constitution hash attestation routes through TheEights
+  # (eights.constitution.attest with consumer="executive-suite") per governance precedence.
+  # See manifests/GOVERNANCE-ROUTING.md §executive-suite.
+  attestTool: "es.ping"
