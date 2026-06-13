@@ -80,44 +80,69 @@ Each orchestrator **adopts executive perspectives in-process** (sequential perso
 
 ## Ecosystem
 
-ExecutiveSuite is one of six interconnected AI projects. It runs standalone or as part of a larger multi-agent ecosystem.
+ExecutiveSuite is the **"executive" squad** in a mesh of nine sibling AI systems bound together by a tenth layer, **AgentMesh**. It runs standalone or as part of this larger multi-agent ecosystem. ExecutiveSuite enrolls into the mesh via the `mesh-manifest.yaml` at this repo's root.
 
 ```mermaid
 graph LR
-    subgraph Governance ["Governance Layer"]
-        AS["<a href='https://github.com/lebobo88/AgentSmith'>AgentSmith</a>\nInspector · Sentinel · Quarantine"]
-        TE["<a href='https://github.com/lebobo88/TheEights'>TheEights</a>\nEvolution Engine · Memory Fabric"]
+    subgraph Governance ["Governance & Substrate"]
+        TE["<a href='https://github.com/lebobo88/TheEights'>TheEights</a>\nMemory · Audit · Identity\nGovernance · Self-Evolution\n(root of trust)"]
+        AS["<a href='https://github.com/lebobo88/AgentSmith'>AgentSmith</a>\nInspection · N1..N10 invariants\nQuarantine · Sentinel"]
     end
 
-    subgraph Orchestration ["Orchestration Layer"]
-        HY["<a href='https://github.com/lebobo88/Hydra'>Hydra</a>\nMulti-Squad Supervisor"]
-        PP["<a href='https://github.com/lebobo88/pair-programmer'>pair-programmer</a>\nCode Generation Harness"]
+    subgraph Orchestration ["Orchestration & Engineering"]
+        HY["<a href='https://github.com/lebobo88/Hydra'>Hydra</a>\nLangGraph Multi-Squad Supervisor"]
+        PP["<a href='https://github.com/lebobo88/pair-programmer'>pair-programmer</a>\nBest-of-N Engineering Harness\n(engineering squad)"]
     end
 
-    subgraph Squads ["Domain Squads"]
-        ES["ExecutiveSuite\nC-Suite Decision Support"]
-        RLM["<a href='https://github.com/lebobo88/RLM-Creative'>RLM-Creative</a>\nMedia & Creative Vertical"]
+    subgraph Squads ["Squad Source-Packs"]
+        ES["<b>ExecutiveSuite</b>\nC-Suite Decision Support\n(executive squad)"]
+        RLM["<a href='https://github.com/lebobo88/RLM-Creative'>RLM-Creative</a>\nCreative / Media Studio\n(garland squad)"]
+        MB["<a href='https://github.com/lebobo88/MarketBliss'>MarketBliss</a>\nEnterprise Marketing\n(five marketing-* squads)"]
+        SEN["<a href='https://github.com/lebobo88/Senate'>Senate</a>\nLegal Curia — 12 Jurists\n(legal-compliance squad)"]
+        XEN["<a href='https://github.com/lebobo88/Xenia-Support'>Xenia</a>\nSupport Hearth — 11 agents\n(customer-support squad)"]
+    end
+
+    subgraph Binding ["Binding Layer"]
+        AM["<a href='https://github.com/lebobo88/AgentMesh'>AgentMesh</a>\nGoverned Control Plane\nregistry · lifecycle · observability\naudit · protocol edge · console"]
     end
 
     HY -- "dispatches goals" --> ES
     HY -- "dispatches goals" --> RLM
-    AS -- "validates schemas\ninspects artifacts" --> ES
+    HY -- "dispatches goals" --> MB
+    HY -- "dispatches goals" --> SEN
+    HY -- "dispatches goals" --> XEN
+    HY -- "engineering" --> PP
+    AS -- "inspects artifacts\nN1..N10 fail-closed" --> ES
     TE -- "evolves skills\nrubrics, agents" --> ES
-    PP -- "code harness" --> ES
-    HY <-- "cross-squad\nmessaging" --> PP
+    AM -- "enrolls + routes\n+ observes" --> ES
+    AM -. "authority stays with" .-> TE
+    TE --> AS --> HY
 
     style Governance fill:#fff0f0,stroke:#cf222e
     style Orchestration fill:#f0f4ff,stroke:#0969da
     style Squads fill:#f0fff4,stroke:#2ea44f
+    style Binding fill:#fdf0ff,stroke:#7c3aed
 ```
 
-| Mode | Description |
-|------|-------------|
-| **Standalone** | Install ExecutiveSuite into any Claude Code project for C-suite decision support. No other projects required. |
-| **With [Hydra](https://github.com/lebobo88/Hydra)** | Hydra dispatches goals to ExecutiveSuite as a squad. Cross-squad messaging delivers structured decision packets between executive, creative, and engineering squads. |
-| **With [AgentSmith](https://github.com/lebobo88/AgentSmith)** | AgentSmith validates agent schemas, enforces constitutional invariants, and can quarantine rogue artifacts across the ecosystem. |
-| **With [TheEights](https://github.com/lebobo88/TheEights)** | TheEights proposes and manages evolution of ExecutiveSuite's skills, rubrics, and agent definitions through a governed propose/evaluate/commit cycle. |
-| **With [pair-programmer](https://github.com/lebobo88/pair-programmer)** | The coding harness that generates, tests, and judges code artifacts. ExecutiveSuite's taxonomy, team pipelines, and debate protocols originated here. |
+| System | Role | Relationship to ExecutiveSuite |
+|--------|------|--------------------------------|
+| **[TheEights](https://github.com/lebobo88/TheEights)** | Shared memory / audit / identity / governance / self-evolution substrate; the root of trust. | Proposes and manages evolution of ExecutiveSuite's skills, rubrics, and agent definitions through a governed propose/evaluate/commit cycle. |
+| **[AgentSmith](https://github.com/lebobo88/AgentSmith)** | Artifact inspection, the N1..N10 fail-closed invariants, quarantine + sentinel (the Matrix warden). | Validates ExecutiveSuite artifacts, enforces constitutional invariants, and can quarantine rogue artifacts. |
+| **[Hydra](https://github.com/lebobo88/Hydra)** | LangGraph multi-squad supervisor; routes, governs, synthesizes. Hosts the squads. | Dispatches goals to ExecutiveSuite as the **executive** squad; delivers structured decision packets between squads. |
+| **[pair-programmer](https://github.com/lebobo88/pair-programmer)** | Best-of-N engineering harness; Hydra's **engineering** squad. | ExecutiveSuite's taxonomy, team pipelines, and debate protocols originated here. |
+| **[RLM-Creative](https://github.com/lebobo88/RLM-Creative)** | Creative / media studio; the **garland** squad. | Sibling squad; ExecutiveSuite's agent file format mirrors RLM-Creative. |
+| **[MarketBliss](https://github.com/lebobo88/MarketBliss)** | Enterprise marketing platform; the five **marketing-\*** squads. | Sibling squad-pack under the same Hydra supervisor. |
+| **[Senate](https://github.com/lebobo88/Senate)** | PhD-level legal wing, "the Curia" — 12 jurists under the Twelve Tables, resolving by the Law of Citations, gatekept by the Tribune's Veto (HITL); the **legal-compliance** squad. | Sibling squad; active legal/compliance counterpart to the C-suite's CLO/Chief Compliance roles. |
+| **[Xenia](https://github.com/lebobo88/Xenia-Support)** | Customer-support "Hearth" — an 11-agent crew for ticket triage, recommendation, VoC, and approval-gated execution with WS-AUTH capability enforcement; the **customer-support** squad. | Sibling squad; active customer-support counterpart. |
+| **[AgentMesh](https://github.com/lebobo88/AgentMesh)** | The thin, governed control plane binding all nine systems. | ExecutiveSuite enrolls via `mesh-manifest.yaml`; AgentMesh routes and observes but enforces no governance of its own. |
+
+### AgentMesh — binding control plane
+
+**AgentMesh** is the tenth layer: the thin, governed **control plane** that unifies the nine sibling systems behind ONE registry (SQLite `~/.agentmesh/state.db`; sole writer of `~/.hydra/backends.json`), ONE lifecycle supervisor (Win32 Job Objects + crash-loop breaker + health probes), ONE observability plane (OTEL + structured logs), ONE federated read-only audit timeline (stitched from TheEights/AgentSmith/Hydra chains), ONE external protocol edge (A2A v0.3/v1.0, REST, MCP-over-HTTP), and ONE operator web console.
+
+ExecutiveSuite **enrolls** into the mesh by shipping the `mesh-manifest.yaml` at this repo's root. Enrollment is **fail-closed**: JSON-Schema validation against `AgentMesh/mesh-manifest.schema.json`, constitution attestation (via TheEights), and AgentSmith structural inspection must all pass. AgentMesh's manifest declares the `executive_suite` backend, the `es.ping` health probe, the nine `es.*` MCP tools, and the governance routing (constitution attestation and audit federation flow through TheEights, not AgentMesh).
+
+AgentMesh **enforces no governance of its own** — authority stays with **TheEights → AgentSmith → Hydra** (precedence order). It routes and observes; it does not arbitrate.
 
 ---
 
@@ -446,11 +471,15 @@ $execCmds | ForEach-Object { Remove-Item "$dst\commands\$_.md" -ErrorAction Sile
 
 | Project | Role | Link |
 |---------|------|------|
-| **Hydra** | Multi-squad supervisor — dispatches goals to ExecutiveSuite | [github.com/lebobo88/Hydra](https://github.com/lebobo88/Hydra) |
-| **AgentSmith** | Governance layer — schema validation, sentinel monitoring, quarantine | [github.com/lebobo88/AgentSmith](https://github.com/lebobo88/AgentSmith) |
-| **TheEights** | Evolution engine — governed artifact lifecycle management | [github.com/lebobo88/TheEights](https://github.com/lebobo88/TheEights) |
-| **pair-programmer** | Code generation harness — taxonomy, teams, best-of-N judging | [github.com/lebobo88/pair-programmer](https://github.com/lebobo88/pair-programmer) |
-| **RLM-Creative** | Media & creative vertical agents — domain-specific C-suite | [github.com/lebobo88/RLM-Creative](https://github.com/lebobo88/RLM-Creative) |
+| **TheEights** | Shared memory / audit / identity / governance / self-evolution substrate — the root of trust | [github.com/lebobo88/TheEights](https://github.com/lebobo88/TheEights) |
+| **AgentSmith** | Artifact inspection, N1..N10 fail-closed invariants, quarantine + sentinel (the Matrix warden) | [github.com/lebobo88/AgentSmith](https://github.com/lebobo88/AgentSmith) |
+| **Hydra** | LangGraph multi-squad supervisor — dispatches goals to ExecutiveSuite | [github.com/lebobo88/Hydra](https://github.com/lebobo88/Hydra) |
+| **pair-programmer** | Best-of-N engineering harness — taxonomy, teams, best-of-N judging (engineering squad) | [github.com/lebobo88/pair-programmer](https://github.com/lebobo88/pair-programmer) |
+| **RLM-Creative** | Creative / media studio — domain-specific C-suite (garland squad) | [github.com/lebobo88/RLM-Creative](https://github.com/lebobo88/RLM-Creative) |
+| **MarketBliss** | Enterprise marketing platform — the five marketing-* squads | [github.com/lebobo88/MarketBliss](https://github.com/lebobo88/MarketBliss) |
+| **Senate** | PhD-level legal Curia — 12 jurists under the Twelve Tables (legal-compliance squad) | [github.com/lebobo88/Senate](https://github.com/lebobo88/Senate) |
+| **Xenia** | Customer-support Hearth — 11-agent crew with WS-AUTH enforcement (customer-support squad) | [github.com/lebobo88/Xenia-Support](https://github.com/lebobo88/Xenia-Support) |
+| **AgentMesh** | The governed control plane binding all nine systems — registry, lifecycle, observability, audit, protocol edge | [github.com/lebobo88/AgentMesh](https://github.com/lebobo88/AgentMesh) |
 
 ---
 
