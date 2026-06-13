@@ -15,12 +15,12 @@ runtime:
   # Source: ~/.hydra/backends.json — "command": "python", "args": ["-m","mcp_servers.executive_suite"]
   # The entrypoint is the __main__.py entry point of the executive_suite module.
   entrypoint: "mcp_servers/executive_suite/__main__.py"
-  cwd: "C:/AiAppDeployments/Hydra"
+  cwd: "${HYDRA_ROOT}"
   # Source: ~/.hydra/backends.json "executive_suite" env block.
   # Values are config, not credentials (AM-EDGE-007).
   env:
-    PYTHONPATH: "C:/AiAppDeployments/Hydra"
-    HYDRA_ES_ROOT: "C:/AiAppDeployments/ExecutiveSuite"
+    PYTHONPATH: "${HYDRA_ROOT}"
+    HYDRA_ES_ROOT: "${HYDRA_ES_ROOT}"
   healthProbe:
     type: mcp-tool-call
     # "es.ping" is the dedicated health probe.
@@ -64,15 +64,15 @@ audit:
   dedupeKeyField: "relative"
 
 governance:
-  # Constitution path relative to runtime.cwd (C:/AiAppDeployments/Hydra).
+  # Constitution path relative to runtime.cwd (${HYDRA_ROOT}).
   # ExecutiveSuite has no root-level CONSTITUTION.md.
-  # Destination after merge pass: C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md
+  # Destination after merge pass: ${HYDRA_ES_ROOT}/CONSTITUTION.md
   # (authored at manifests/constitutions/executive-suite.CONSTITUTION.md — see README).
   # NOTE: constitutionPath is relative to the Hydra cwd (the server's working directory).
-  # The actual file lives at C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md — this
+  # The actual file lives at ${HYDRA_ES_ROOT}/CONSTITUTION.md — this
   # relative path traversal from Hydra cwd is safe (no YAML injection chars in the path).
-  # When meshd resolves: resolve(join("C:/AiAppDeployments/Hydra", "../ExecutiveSuite/CONSTITUTION.md"))
-  # = C:/AiAppDeployments/ExecutiveSuite/CONSTITUTION.md (correct).
+  # When meshd resolves: resolve(join("${HYDRA_ROOT}", "../ExecutiveSuite/CONSTITUTION.md"))
+  # = ${HYDRA_ES_ROOT}/CONSTITUTION.md (correct).
   constitutionPath: "../ExecutiveSuite/CONSTITUTION.md"
   # executive_suite server has no dedicated attest tool.
   # "es.ping" confirms MCP connectivity only (proves server alive, not constitution hash).
