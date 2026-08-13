@@ -1,0 +1,6 @@
+{
+  "name": "executive-suite-local",
+  "owner": {"name": "lebobo88"},
+  "description": "Local marketplace for the ExecutiveSuite canonical Claude plugin.",
+  "plugins": [{"name": "executive-suite", "source": "./plugins/executive-suite"}]
+}
