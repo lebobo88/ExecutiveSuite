@@ -30,7 +30,7 @@ See `README.md` (Ecosystem section) for the full mesh map.
 
 - Agents are standard Claude Code subagents: Markdown + YAML frontmatter (`name`, `description`, `model`, `maxTurns`, `skills`).
 - Default models: `opus` for CEO/CSO/CFO/CTO/CAIO/CPO/CLO/chief-risk-officer + all orchestrators; `sonnet` for the rest.
-- Skills live under `.claude/skills/<name>/SKILL.md`; commands under `.claude/commands/`.
+- The canonical plugin keeps skills under `plugins/executive-suite/skills/<name>/SKILL.md` and commands under `plugins/executive-suite/commands/`.
 - Every executive declares explicit `Constraints` (what they do not decide) and a defined output directory.
 
 ## Where To Read More
