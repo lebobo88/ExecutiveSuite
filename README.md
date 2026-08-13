@@ -362,13 +362,13 @@ The `output/` directory is relative to the project Claude Code was launched from
 
 ## Installation
 
-### Project scope (default)
+### Plugin scope (recommended)
 
-Clone the repository and run Claude Code from its directory — the `.claude/` folder is auto-discovered:
+Install or load ExecutiveSuite directly as a Claude Code plugin:
 
 ```bash
-git clone https://github.com/lebobo88/ExecutiveSuite.git
-cd ExecutiveSuite
+# Add plugin directly
+claude plugin add ./plugins/executive-suite
 ```
 
 ### User scope (available in every project)
@@ -380,10 +380,11 @@ Install agents, skills, and commands into `~/.claude/` so they are available glo
 Requires either an **elevated PowerShell** or Windows **Developer Mode** enabled (`Settings > System > For developers > Developer Mode`). Run from the cloned `ExecutiveSuite` directory:
 
 ```powershell
-$src = Join-Path (Get-Location) ".claude"
+$src = Join-Path (Get-Location) "plugins\executive-suite"
 $dst = Join-Path $env:USERPROFILE ".claude"
 
 foreach ($d in 'agents','skills','commands') {
+  if (-not (Test-Path "$dst\$d")) { New-Item -ItemType Directory -Path "$dst\$d" -Force | Out-Null }
   Get-ChildItem "$src\$d" | ForEach-Object {
     $linkPath = Join-Path "$dst\$d" $_.Name
     if (Test-Path $linkPath) { Remove-Item $linkPath -Recurse -Force }
@@ -409,7 +410,7 @@ foreach ($d in 'agents','skills','commands') {
 Edits in the repo require re-running this to propagate:
 
 ```powershell
-$src = Join-Path (Get-Location) ".claude"
+$src = Join-Path (Get-Location) "plugins\executive-suite"
 $dst = Join-Path $env:USERPROFILE ".claude"
 
 Copy-Item "$src\agents\*"   "$dst\agents\"   -Recurse -Force
@@ -420,9 +421,10 @@ Copy-Item "$src\commands\*" "$dst\commands\" -Recurse -Force
 #### macOS / Linux
 
 ```bash
-src="$(pwd)/.claude"   # run from the cloned ExecutiveSuite directory
+src="$(pwd)/plugins/executive-suite"   # run from the cloned ExecutiveSuite directory
 dst="$HOME/.claude"
 for d in agents skills commands; do
+  mkdir -p "$dst/$d"
   for f in "$src/$d"/*; do
     ln -snf "$f" "$dst/$d/$(basename "$f")"
   done
@@ -431,7 +433,7 @@ done
 
 #### What is NOT installed globally
 
-- `settings.json` — project-scoped (output root + status line). Do not promote to user scope.
+- `settings.json` — project-scoped (output root + status line + permissions). Do not promote to user scope.
 - `CLAUDE.md` — project contract. Promoting it would inject ExecutiveSuite framing into unrelated projects.
 
 #### Rollback (user scope)

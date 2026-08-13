@@ -1,0 +1,1 @@
+ROUTE-AUDIT C3 round-trip probe payload 2026-07-06. If you can read this via es.output.read, the write path works.

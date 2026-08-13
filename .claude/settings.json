@@ -7,11 +7,22 @@
       "Edit",
       "Glob",
       "Grep",
+      "WebSearch",
+      "WebFetch",
       "Bash(git status)",
       "Bash(git diff:*)",
       "Bash(git log:*)",
       "Bash(ls:*)",
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(python -m unittest *)",
+      "Bash(python tests/*)",
+      "Bash(python plugins/executive-suite/skills/financial-frameworks/scripts/*)"
+    ],
+    "deny": [
+      "Edit(CONSTITUTION.md)",
+      "Write(CONSTITUTION.md)",
+      "Bash(rm *CONSTITUTION.md*)",
+      "Bash(git checkout *CONSTITUTION.md*)"
     ]
   },
   "env": {

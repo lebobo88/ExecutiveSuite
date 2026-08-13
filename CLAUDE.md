@@ -1,6 +1,6 @@
 # ExecutiveSuite — AI C-Suite Operating Contract
 
-A comprehensive multi-agent C-suite for enterprise strategic decision support, information triage, and financial architecture integration. Industry-agnostic; intended to be dropped into any company's `.claude/` layer or referenced as a roster.
+A comprehensive multi-agent C-suite for enterprise strategic decision support, information triage, and financial architecture integration. Industry-agnostic; structured as a canonical Claude Code plugin (`plugins/executive-suite/`) and referenced as an enterprise roster.
 
 ## Provenance
 
@@ -38,7 +38,7 @@ Architecture grounded in: `Corporate Multi-Agent AI Systems for C-Suite Strategi
 
 ## Decision Protocol
 
-Every executive output follows the Executive Memo Format from `skills/executive-protocol/SKILL.md`. Every multi-agent session follows the Board Meeting Protocol or its variant (debate, war-room, cockpit).
+Every executive output follows the Executive Memo Format from `plugins/executive-suite/skills/executive-protocol/SKILL.md`. Every multi-agent session follows the Board Meeting Protocol or its variant (debate, war-room, cockpit).
 
 ## Financial Hardcoding Directive
 
@@ -49,11 +49,13 @@ Per the research doc Section "Financial Framework Hardcoding Directive", agents 
 - Monte Carlo scenario engines
 - Covenant / leverage / liquidity checkers
 
+Deterministic execution assets are located at `plugins/executive-suite/skills/financial-frameworks/scripts/finance_engine.py`.
+
 Hard guardrails (minimum IRR, max leverage, covenant limits, prohibited counterparties, regulatory caps) MUST be enforced before any agent recommends action. The `financial-frameworks` skill encodes these.
 
 ## Governance & HITL
 
-- EU AI Act Article 9 risk-management posture (see `skills/ai-governance/SKILL.md`)
+- EU AI Act Article 9 risk-management posture (see `plugins/executive-suite/skills/ai-governance/SKILL.md`)
 - Every high-impact recommendation requires HITL approval; agents present options + dissenting opinions, never unilateral go/no-go
 - All recommendations traceable to source data, model versions, intermediate reasoning (audit trail)
 - Multi-agent failure mitigation: explicit role prompts, verification steps, termination conditions, no free-form swarms
@@ -100,7 +102,8 @@ output/
 
 ## Conventions
 
-- Every agent declares: model, maxTurns, skills (frontmatter)
+- Every agent declares: model, maxTurns, skills, tools, and color (frontmatter)
 - Default models: `opus` for CEO/CSO/CFO/CTO/CAIO/CPO/CLO/chief-risk-officer/boardroom/mna-cockpit/crisis-warroom/capital-allocation; `sonnet` for the rest
 - Every agent has explicit `Constraints` (what they don't decide) and a defined output directory
 - Every agent cites a decision framework with weighted criteria
+- Prompts use structured XML tags (`<trusted_policy>`, `<role_definition>`, `<responsibilities>`, `<decision_framework>`, `<evidence_and_uncertainty>`, `<constraints>`, `<output_contract>`)
